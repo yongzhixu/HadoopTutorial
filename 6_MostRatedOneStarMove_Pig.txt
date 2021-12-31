@@ -1,0 +1,14 @@
+ratings = LOAD '/user/mlk/u.data' AS (userID:int, movieID:int, rating:int, ratingTime:int);
+metadata = LOAD '/user/mlk/u.item' USING PigStorage('|')
+	AS (movieID:int, movieTitle:chararray, releaseDate:chararray, videoRealese:chararray, imdblink:chararray);
+
+nameLookup = FOREACH metadata GENERATE movieID, movieTitle,
+	ToUnixTime(ToDate(releaseDate, 'dd-MMM-yyyy')) AS releaseTime;
+
+ratingsByMovie = GROUP ratings BY movieID;
+avgRatings = FOREACH ratingsByMovie GENERATE group as movieID, AVG(ratings.rating) as avgRating, COUNT(ratings.rating) as ratingFrequency;
+oneStarMovies = FILTER avgRatings BY avgRating <= 1.0;
+oneStarsWithData = JOIN oneStarMovies BY movieID, nameLookup BY movieID;
+mostRatedOneStarMovies = ORDER oneStarsWithData BY oneStarMovies::ratingFrequency;
+DESCRIBE mostRatedOneStarMovies;
+DUMP mostRatedOneStarMovies;
