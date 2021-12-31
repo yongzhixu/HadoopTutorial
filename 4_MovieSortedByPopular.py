@@ -1,13 +1,14 @@
 from mrjob.job import MRJob
 from mrjob.step import MRStep
 
+
 class MostPopularMovie(MRJob):
     def steps(self):
         return [
             MRStep(mapper=self.mapper_get_ratings,
                    reducer=self.reducer_count_ratings)
             ,
-            MRStep(reducer = self.reducer_find_max)
+            MRStep(reducer=self.reducer_movie_sort)
         ]
 
     def mapper_get_ratings(self, _, line):
@@ -18,10 +19,12 @@ class MostPopularMovie(MRJob):
     def reducer_count_ratings(self, key, values):
         # set the key as identical so we can aggregate late
         # max(key, sum(values)) wont get the most rate movie, but the one with biggest movie id
-        yield None, (sum(values), key)
+        yield str(sum(values)).zfill(6), key
 
-    def reducer_find_max(self, key, values):
-        yield max(values)
+    def reducer_movie_sort(self, counts, movies):
+        for movie in movies:
+            yield movie, counts
+
 
 if __name__ == '__main__':
     MostPopularMovie.run()
