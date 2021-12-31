@@ -7,8 +7,9 @@ nameLookup = FOREACH metadata GENERATE movieID, movieTitle,
 
 ratingsByMovie = GROUP ratings BY movieID;
 avgRatings = FOREACH ratingsByMovie GENERATE group as movieID, AVG(ratings.rating) as avgRating, COUNT(ratings.rating) as ratingFrequency;
-oneStarMovies = FILTER avgRatings BY avgRating <= 1.0;
+oneStarMovies = FILTER avgRatings BY avgRating < 2.0;
 oneStarsWithData = JOIN oneStarMovies BY movieID, nameLookup BY movieID;
-mostRatedOneStarMovies = ORDER oneStarsWithData BY oneStarMovies::ratingFrequency;
-DESCRIBE mostRatedOneStarMovies;
-DUMP mostRatedOneStarMovies;
+mostRatedOneStarMovies = ORDER oneStarsWithData BY oneStarMovies::ratingFrequency DESC;
+finalResult = FOREACH mostRatedOneStarMovies GENERATE nameLookup::movieTitle AS movieTitle, oneStarMovies::avgRating AS avgRating, oneStarMovies::ratingFrequency AS ratingFrequency;
+DESCRIBE finalResult;
+DUMP finalResult;
