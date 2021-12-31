@@ -4,6 +4,7 @@ from pyspark.sql import Row
 from pyspark.sql.functions import lit
 
 # Load up movie ID -> movie name dictionary
+# sudo pip install numpy==1.16
 def loadMovieNames():
     movieNames = {}
     with open("ml-100k/u.item") as f:
@@ -21,7 +22,8 @@ def parseInput(line):
 if __name__ == "__main__":
     # Create a SparkSession
     spark = SparkSession.builder.appName("MovieRecs").getOrCreate()
-
+    # if run into "pyspark.sql.utils.AnalysisException: 'Detected cartesian product for LEFT OUTER join between", uncomment the following line
+    # spark.conf.set("spark.sql.crossJoin.enabled", "true")
     # Load up our movie ID -> name dictionary
     movieNames = loadMovieNames()
 
@@ -42,7 +44,7 @@ if __name__ == "__main__":
     print("\nRatings for user ID 0:")
     userRatings = ratings.filter("userID = 0")
     for rating in userRatings.collect():
-        print movieNames[rating['movieID']], rating['rating']
+        print(movieNames[rating['movieID']], rating['rating'])
 
     print("\nTop 20 recommendations:")
     # Find movies rated more than 100 times

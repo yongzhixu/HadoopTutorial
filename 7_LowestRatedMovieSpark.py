@@ -36,6 +36,7 @@ if __name__ == "__main__":
     ratingTotalsAndCount = movieRatings.reduceByKey(lambda movie1, movie2: ( movie1[0] + movie2[0], movie1[1] + movie2[1] ) )
 
     # Map to (movieID, averageRating)
+    # either map or reduce, both apply to the value(key:value, pair)
     averageRatings = ratingTotalsAndCount.mapValues(lambda totalAndCount : totalAndCount[0] / totalAndCount[1])
 
     # Sort by average rating
