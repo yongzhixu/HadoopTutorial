@@ -15,12 +15,11 @@ class MostPopularMovie(MRJob):
         yield movieID, 1
 
     def reducer_count_ratings(self, key, values):
+        # set the key as identical so we can aggregate late
+        # max(key, sum(values)) wont get the most rate movie, but the one with biggest movie id
         yield None, (sum(values), key)
 
     def reducer_find_max(self, key, values):
-        # print(str(values))
-        # for value in values:
-        #     print(value)
         yield max(values)
 
 if __name__ == '__main__':
