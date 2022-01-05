@@ -1,4 +1,4 @@
-REGISTER /usr/hdp/current/phoenix-client/phoenix-client.jar
+REGISTER /usr/hdp/current/phoenix-client/phoenix-client.jar;
 
 users = LOAD '/user/maria_dev/ml-100k/u.user' 
 USING PigStorage('|') 
