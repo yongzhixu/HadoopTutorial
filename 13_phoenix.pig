@@ -6,7 +6,7 @@ AS (USERID:int, AGE:int, GENDER:chararray, OCCUPATION:chararray, ZIP:chararray);
 
 STORE users into 'hbase://users' using
     org.apache.phoenix.pig.PhoenixHBaseStorage('localhost','-batchSize 5000');
-
+-- get pig to talk to phoenix
 occupations = load 'hbase://table/users/USERID,OCCUPATION' using org.apache.phoenix.pig.PhoenixHBaseLoader('localhost');
 
 grpd = GROUP occupations BY OCCUPATION; 
