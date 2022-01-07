@@ -13,6 +13,7 @@ if __name__ == "__main__":
     # Get the raw data
     lines = spark.sparkContext.textFile("hdfs:///user/maria_dev/ml-100k/u.user")
     # Convert it to a RDD of Row objects with (userID, age, gender, occupation, zip)
+    lines.first().show()
     users = lines.map(parseInput)
     # Convert that to a DataFrame
     usersDataset = spark.createDataFrame(users)
