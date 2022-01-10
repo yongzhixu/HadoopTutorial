@@ -39,6 +39,9 @@ if __name__ == "__main__":
     urls = lines.map(extractURLRequest)
 
     # Reduce by URL over a 5-minute window sliding every second
+    # lambda x: (x, 1)， map into a tuple, for counting purpose
+    # lambda x, y: introduces two tuples, then manipulate their values
+    # reduceByKeyAndWindow, group by key
     urlCounts = urls.map(lambda x: (x, 1)).reduceByKeyAndWindow(lambda x, y: x + y, lambda x, y : x - y, 300, 1)
 
     # Sort and print the results
