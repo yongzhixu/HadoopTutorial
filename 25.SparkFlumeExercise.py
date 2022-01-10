@@ -24,7 +24,7 @@ def extractStatus(line):
         if status:
             return status
 
-
+# counting, how many requests there are for each requesting status
 if __name__ == "__main__":
 
     sc = SparkContext(appName="StreamingFlumeLogAggregator")
