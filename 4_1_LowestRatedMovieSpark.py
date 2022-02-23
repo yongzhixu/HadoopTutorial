@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # Convert to (movieID, (rating, 1.0))
     movieRatings = lines.map(parseInput)
 
-    # Reduce to (movieID, (sumOfRatings, totalRatings))
+    # Reduce to (movieID, (sumOfRatings, totalRatings))ｈｄ
     ratingTotalsAndCount = movieRatings.reduceByKey(lambda movie1, movie2: ( movie1[0] + movie2[0], movie1[1] + movie2[1] ) )
 
     # Map to (movieID, averageRating)
