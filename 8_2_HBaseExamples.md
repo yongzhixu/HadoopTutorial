@@ -36,5 +36,9 @@ clean table >> drop 'users'
 
 
 
+
+
 [tutorial point](https://www.tutorialspoint.com/hbase/hbase_scan.htm)
+
+
 
